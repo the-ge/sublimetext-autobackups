@@ -69,23 +69,17 @@ class PathsHelper(object):
     def create_name_file(filename):
         (filepart, extensionpart) = os.path.splitext(filename)
 
-        if PathsHelper.backup_name_mode not in (False, None, ) \
-          and PathsHelper.backup_name_mode.lower() == 'prefix':
-            filepart = '%s.%s' % (backup_name_mode_text, filepart)
+        now_date = str(datetime.datetime.now())
+        date = now_date[:10]
+        time = now_date[11:19].replace(':', '')
 
-        backup_per_day =  PathsHelper.backup_per_day
-        backup_per_time =  PathsHelper.backup_per_time
-        if (backup_per_day and backup_per_time == 'file'):
-            now_date = str(datetime.datetime.now())
-            time = now_date[11:19].replace(':', '')
-            name = '%s_%s%s' % (filepart, time, extensionpart,)
-        else:
-            name = '%s%s' % (filepart, extensionpart,)
+        name_format = re.sub('[^0-9a-zA-Z._-]', '', PathsHelper.backup_name_mode)
+        name = name_format.replace('name', filepart)
+        name = name.replace('date', date)
+        name = name.replace('time', time)
+        name = name.replace('tag', backup_name_mode_text)
+        name = name.replace('ext', extensionpart.strip('.'))
 
-        (filepart, extensionpart) = os.path.splitext(name) 
-        if PathsHelper.backup_name_mode not in (False, None, ) \
-          and PathsHelper.backup_name_mode.lower() == 'suffix':
-            name = '%s.%s%s' % (filepart, backup_name_mode_text, extensionpart)
         return name
 
     @staticmethod
