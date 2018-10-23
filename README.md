@@ -1,4 +1,4 @@
-sublimetext-autobackups
+AutoBackups
 ======================
 
 Sublime Text 2/3 Auto backups plugin
