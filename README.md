@@ -116,7 +116,7 @@ Credit list in [CREDITS](CREDITS)
 
 This code is available on [Github][0]. Pull requests are welcome.
 
-Created by [Avtandil Kikabidze][2], modified by [The G][3]
+Created by [Avtandil Kikabidze][2], modified by [The G][3].
 
 
 ## License
