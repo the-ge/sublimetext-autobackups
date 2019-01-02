@@ -1,21 +1,11 @@
-sublimetext-autobackups
+AutoBackups
 ======================
 
-Sublime Text 2/3 Auto backups plugin
+Sublime Text 3 Auto backups plugin
 
-AutoBackups is a Sublime Text 2/3 plugin, which automatically save a backup copy every time you save or open (if backup file not exists) a file. (Like DreamWeaver.. No, better than DreamWeaver)
+AutoBackups is a Sublime Text 3 plugin, which automatically save a backup copy every time you save or open (if backup file not exists) a file. (Like DreamWeaver.. No, better than DreamWeaver)
 
 When you edit text files (scripts, prose, whatever) you often find yourself wishing for an last version. Ever accidentally deleted a chunk from an important configuration file, or wished you could roll back a document a few hours? This plugin takes a copy of file you open/save and copies it into a backup directory structure, ensuring that you never lose an old version of a file. If enabled setting backup_per_day backups will be saved for each day. If enabled setting backup_per_time backups will be saved for each save.
-
-
-### Sponsors
-
-No sponsors yet.. :(
-
-If you like the software, don't forget to donate to further development of it!
-
-[![PayPal donate button](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_pp_142x27.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=akalongman@gmail.com&item_name=Donation%20to%20Sublime%20Text%20-%20AutoBackups&item_number=1&no_shipping=1 "Donate to this project using Paypal")
-
 
 ### Configuration
 
@@ -28,8 +18,8 @@ Configuration options:
   // plugin is updated. Instead transfer what you need to the 'Settings - User' file.
 
   // The directory where we'll keep our backups. If empty, we'll try to put them in
-  // D:/Sublime Text Backups
-  "backup_dir": "D:/Sublime Text Backups",
+  //"backup_dir": "D:/Sublime Text Backups",
+  "backup_dir": "~/.backup/SublimeText",
 
   // If true, also save a backup copy any time a file is opened (if backup file not exists)
   "backup_on_open_file": true,
@@ -43,6 +33,16 @@ Configuration options:
   // "file" - backup example D:/Sublime Text Backups/2013-05-23/myfile_095034.php
   // to use this feature, you must have enabled backup_per_day setting
   "backup_per_time": "file",
+
+  // If, set will change the name of the file according to the format using the following building blocks:
+  // tag: "auto-save"
+  // name: "myfile"
+  // date: "2013-05-23"
+  // time: "095034"
+  // ext: "php"
+  // format examples: "name.ext", "name.tag.ext", "name_date-time.ext", "tag_date-time.name.ext"
+  // if None or false won't change the name
+  "backup_name_mode":"name_date-time.ext",
 
   // Files larger than this many bytes won't be backed up.
   "max_backup_file_size_bytes": 262144, // = 256 KB
@@ -84,13 +84,10 @@ git clone https://github.com/akalongman/sublimetext-autobackups.git AutoBackups
 The "Packages" directory is located at:
 
  - OS X:
-   - ST2 `~/Library/Application Support/Sublime Text 2/Packages/`
    - ST3 `~/Library/Application Support/Sublime Text 3/Packages/`
  - Linux:
-   - ST2 `~/.config/sublime-text-2/Packages/`
    - ST3 `~/.config/sublime-text-3/Packages/`
  - Windows:
-   - ST2 `%APPDATA%/Sublime Text 2/Packages/`
    - ST3 `%APPDATA%/Sublime Text 3/Packages/`
 
 To see if plugin working, open the console with the `View->Show Console` menu item. When you save a file, you should see a line like this, indicating that the file has been backed up:
@@ -129,4 +126,4 @@ Created by [Avtandil Kikabidze][2].
 
  [0]: https://github.com/akalongman/sublimetext-autobackups
  [1]: https://packagecontrol.io/installation
- [2]: mailto:akalongman@gmail.com
+ [2]: mailto:the.ge@pm.me
