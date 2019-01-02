@@ -116,7 +116,7 @@ Credit list in [CREDITS](CREDITS)
 
 This code is available on [Github][0]. Pull requests are welcome.
 
-Created by [Avtandil Kikabidze][2].
+Created by [Avtandil Kikabidze][2], modified by [The G][3]
 
 
 ## License
@@ -126,4 +126,5 @@ Created by [Avtandil Kikabidze][2].
 
  [0]: https://github.com/akalongman/sublimetext-autobackups
  [1]: https://packagecontrol.io/installation
- [2]: mailto:the.ge@pm.me
+ [2]: mailto:akalongman@gmail.com
+ [3]: mailto:the.ge@pm.me
