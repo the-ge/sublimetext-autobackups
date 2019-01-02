@@ -67,18 +67,21 @@ class PathsHelper(object):
 
     @staticmethod
     def create_name_file(filename):
-        (filepart, extensionpart) = os.path.splitext(filename)
+        name = filename
 
-        now_date = str(datetime.datetime.now())
-        date = now_date[:10]
-        time = now_date[11:19].replace(':', '')
+        if (PathsHelper.backup_name_mode != False and PathsHelper.backup_name_mode != None):
+            (filepart, extensionpart) = os.path.splitext(filename)
 
-        name_format = re.sub('[^0-9a-zA-Z._-]', '', PathsHelper.backup_name_mode)
-        name = name_format.replace('name', filepart)
-        name = name.replace('date', date)
-        name = name.replace('time', time)
-        name = name.replace('tag', backup_name_mode_text)
-        name = name.replace('ext', extensionpart.strip('.'))
+            now_date = str(datetime.datetime.now())
+            date = now_date[:10]
+            time = now_date[11:19].replace(':', '')
+
+            name_format = re.sub('[^0-9a-zA-Z._-]', '', PathsHelper.backup_name_mode)
+            name = name_format.replace('name', filepart)
+            name = name.replace('date', date)
+            name = name.replace('time', time)
+            name = name.replace('tag', backup_name_mode_text)
+            name = name.replace('ext', extensionpart.strip('.'))
 
         return name
 
