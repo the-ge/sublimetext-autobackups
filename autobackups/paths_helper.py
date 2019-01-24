@@ -54,13 +54,13 @@ class PathsHelper(object):
 
         # Windows: <user folder>/My Documents/Sublime Text Backups
         if (PathsHelper.platform == 'Windows'):
-            backup_dir = 'D:/Sublime Text Backups'
+            backup_dir = 'C:/SublimeTextBackups'
             if (backup_per_day and not only_base):
                 backup_dir = backup_dir +'/'+ date
             return backup_dir
 
         # Linux/OSX/other: ~/sublime_backups
-        backup_dir = '~/.sublime/backups'
+        backup_dir = '~/.local/sublime/backups'
         if (backup_per_day and not only_base):
             backup_dir = backup_dir +'/'+ date
         return os.path.expanduser(backup_dir)
@@ -76,12 +76,12 @@ class PathsHelper(object):
             date = now_date[:10]
             time = now_date[11:19].replace(':', '')
 
-            name_format = re.sub('[^0-9a-zA-Z._-]', '', PathsHelper.backup_name_mode)
-            name = name_format.replace('name', filepart)
-            name = name.replace('date', date)
-            name = name.replace('time', time)
-            name = name.replace('tag', backup_name_mode_text)
-            name = name.replace('ext', extensionpart.strip('.'))
+            name_format = re.sub('[^0-9a-zA-Z%._-]', '', PathsHelper.backup_name_mode)
+            name = name_format.replace('%name%', filepart)
+            name = name.replace('%date%', date)
+            name = name.replace('%time%', time)
+            name = name.replace('%tag%', backup_name_mode_text)
+            name = name.replace('%ext%', extensionpart.strip('.'))
 
         return name
 
