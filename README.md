@@ -34,14 +34,14 @@ Configuration options:
   // to use this feature, you must have enabled backup_per_day setting
   "backup_per_time": "file",
 
-	// If set, will change the name of the file according to the format using the following building blocks:
-	//     tag i.e. "auto-save"
-	//     name i.e. "myfile"
-	//     date i.e. "2013-05-23"
-	//     time i.e. "095034"
-	//     ext i.e. "php"
-	// format examples: "%name%%ext%", "%name%.%tag%%ext%", "%name%_%date%-%time%%ext%", "%tag%_%date%-%time%.%name%%ext%"
-	// notice the dot in the examples, the extension includes the starting dot
+  // If set, will change the name of the file according to the format using the following building blocks:
+  //     tag i.e. "auto-save"
+  //     name i.e. "myfile"
+  //     date i.e. "2013-05-23"
+  //     time i.e. "095034"
+  //     ext i.e. "php"
+  // format examples: "%name%%ext%", "%name%.%tag%%ext%", "%name%_%date%-%time%%ext%", "%tag%_%date%-%time%.%name%%ext%"
+  // notice the dot in the examples, the extension includes the starting dot
   // if None or false won't change the name
   "backup_name_mode":"name_date-time.ext",
 
