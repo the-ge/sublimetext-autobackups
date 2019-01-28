@@ -81,7 +81,7 @@ class PathsHelper(object):
             name = name.replace('%date%', date)
             name = name.replace('%time%', time)
             name = name.replace('%tag%', backup_name_mode_text)
-            name = name.replace('%ext%', extensionpart.strip('.'))
+            name = name.replace('%ext%', extensionpart)
 
         return name
 
