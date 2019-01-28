@@ -43,7 +43,7 @@ Configuration options:
   // format examples: "%name%%ext%", "%name%.%tag%%ext%", "%name%_%date%-%time%%ext%", "%tag%_%date%-%time%.%name%%ext%"
   // notice the dot in the examples, the extension includes the starting dot
   // if None or false won't change the name
-  "backup_name_mode":"name_date-time.ext",
+  "backup_name_mode":"%name%_%date%-%time%%ext%",
 
   // Files larger than this many bytes won't be backed up.
   "max_backup_file_size_bytes": 262144, // = 256 KB
