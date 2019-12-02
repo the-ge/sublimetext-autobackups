@@ -116,10 +116,13 @@ class PathsHelper(object):
 
         return path
 
-
-
     @staticmethod
     def get_backup_filepath(filepath):
         filename = os.path.split(filepath)[1]
         return os.path.join(PathsHelper.get_backup_path(filepath), PathsHelper.create_name_file(filename))
 
+    @staticmethod
+    def get_backup_filepath_sanitized(filename):
+        filename = filename.replace(':', '_')
+
+        return filename
