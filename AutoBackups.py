@@ -63,11 +63,7 @@ def plugin_loaded():
     backup_name_mode = settings.get('backup_name_mode')
 
     PathsHelper.initialize(platform, backup_dir, backup_per_day, backup_per_time, backup_name_mode)
-    cprint('AutoBackups: Plugin Initialized')
-    cprint('With: backup_dir: {}\n\
-            backup_per_day: {}\n\
-            backup_per_time: {}\n\
-            backup_name_mode: {}'.format(backup_dir, backup_per_day, backup_per_time, backup_name_mode))
+    cprint('AutoBackups:    dir={}    per_day={}    per_time={}    name_mode={}'.format(backup_dir, backup_per_day, backup_per_time, backup_name_mode))
     sublime.set_timeout(gc, 10000)
 
 
