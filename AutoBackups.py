@@ -141,7 +141,7 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
             return
 
 
-        newname = PathsHelper.get_backup_filepath(filename)
+        newname = PathsHelper.get_backup_filepath_sanitized(filename)
         if newname == None:
             return
 
@@ -249,7 +249,7 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 
         if (not backup_per_day):
             filepath = view.file_name()
-            newname = PathsHelper.get_backup_filepath(filepath)
+            newname = PathsHelper.get_backup_filepath_sanitized(filepath)
             if os.path.isfile(newname):
                 window.open_file(newname)
             else:
