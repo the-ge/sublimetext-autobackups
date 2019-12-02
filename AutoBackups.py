@@ -175,7 +175,7 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
             return False;
 
         hashes[buffer_id] = current_hash
-        self.console('Backup saved to: '+newname.replace('\\', '/'))
+        #self.console('Backup saved to: '+newname.replace('\\', '/'))
 
     def is_backup_file(self, path):
         backup_per_time = settings.get('backup_per_time')
