@@ -60,7 +60,7 @@ class PathsHelper(object):
             return backup_dir
 
         # Linux/OSX/other: ~/sublime_backups
-        backup_dir = '~/.local/sublime/backups'
+        backup_dir = '~/.sublime/backups'
         if (backup_per_day and not only_base):
             backup_dir = backup_dir +'/'+ date
         return os.path.expanduser(backup_dir)
@@ -69,7 +69,7 @@ class PathsHelper(object):
     def create_name_file(filename):
         name = filename
 
-        if (PathsHelper.backup_name_mode != False and PathsHelper.backup_name_mode != None):
+       if PathsHelper.backup_name_mode not in (False, None, ):
             (filepart, extensionpart) = os.path.splitext(filename)
 
             now_date = str(datetime.datetime.now())
