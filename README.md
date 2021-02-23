@@ -17,20 +17,21 @@ Configuration options:
   // Don't make changes to this file directly as they can get wiped out when the
   // plugin is updated. Instead transfer what you need to the 'Settings - User' file.
 
-  // The directory where we'll keep our backups. If empty, we'll try to put them in
-  //"backup_dir": "D:/Sublime Text Backups",
-  "backup_dir": "~/.backup/SublimeText",
+  // The directory where we'll keep our backups; defaults to
+  //"backup_dir": "C:/SublimeTextBackups",
+  "backup_dir": "~/.SublimeText",
 
-  // If true, also save a backup copy any time a file is opened (if backup file not exists)
+  // If true, saves a backup copy any time a file is opened (if backup file not exists)
   "backup_on_open_file": true,
 
-  // If true, backups saved per day, in separate folders, e.g. C:/SublimeTextBackups/2013-05-23/myfile.php
+  // If true, backups saved per day, in separate folders,
+  // e.g. C:/SublimeTextBackups/2013-05-23/myfile.php
   "backup_per_day": true,
 
   // If set, backups saved per second. possible values: false, "folder" or "file"
   // false - disabled backup per second
-  // "folder" - backup example D:/Sublime Text Backups/2013-05-23/095034/myfile.php
-  // "file" - backup example D:/Sublime Text Backups/2013-05-23/myfile_095034.php
+  // "folder" -> D:/Sublime Text Backups/2013-05-23/095034/myfile.php
+  // "file"   -> D:/Sublime Text Backups/2013-05-23/myfile_095034.php
   // to use this feature, you must have enabled backup_per_day setting
   "backup_per_time": "file",
 
@@ -40,8 +41,12 @@ Configuration options:
   //     date i.e. "2013-05-23"
   //     time i.e. "095034"
   //     ext i.e. "php"
-  // format examples: "%name%%ext%", "%name%.%tag%%ext%", "%name%_%date%-%time%%ext%", "%tag%_%date%-%time%.%name%%ext%"
-  // notice the dot in the examples, the extension includes the starting dot
+  // format examples:
+  //     "%name%%ext%"
+  //     "%name%.%tag%%ext%"
+  //     "%name%_%date%-%time%%ext%"
+  //     "%tag%_%date%-%time%.%name%%ext%"
+  // notice the dot in the examples, the extension includes the preceding dot
   // if None or false won't change the name
   "backup_name_mode":"%name%_%date%-%time%%ext%",
 
@@ -54,9 +59,9 @@ Configuration options:
   // ignore files/folders which match regexes
   "ignore_regexes": [
     // VCS folders
-    "/\\.svn/", "/\\.hg/", "/\\.git/", "/\\.bzr/"
+    "/\\.svn/", "/\\.hg/", "/\\.git/", "/\\.bzr/",
     // binary extensions
-    ,"\\.(jpg|JPG|jpeg|JPEG|pjpeg|PJPEG|gif|GIF|png|PNG|apng|APNG|bmp|BMP|mp3|MP3|mid|MID|wav|WAV|au|AU|mp4|MP4|3gp|3GP|avi|AVI|wmv|WMV|mpeg|MPEG|mpg|MPG|mkv|MKV|swf|SWF|flv|FLV|zip|ZIP|rar|RAR|tar|TAR|tgz|TGZ|gz|GZ|bz2?|BZ2?|pdf|PDF|docx?|DOCX?|xlsx?|XLSX?|pptx?|PPTX?|rtf|RTF|psd|PSD|cdr|CDR|fla|FLA|exe|EXE)$"
+  "\\.(jpg|JPG|jpeg|JPEG|pjpeg|PJPEG|gif|GIF|png|PNG|apng|APNG|bmp|BMP|mp3|MP3|mid|MID|wav|WAV|au|AU|mp4|MP4|3gp|3GP|avi|AVI|wmv|WMV|mpeg|MPEG|mpg|MPG|mkv|MKV|swf|SWF|flv|FLV|zip|ZIP|rar|RAR|tar|TAR|tgz|TGZ|gz|GZ|bz2?|BZ2?|pdf|PDF|docx?|DOCX?|xlsx?|XLSX?|pptx?|PPTX?|rtf|RTF|psd|PSD|cdr|CDR|fla|FLA|exe|EXE)$"
   ],
 
   // If true, backup file opened in same line as cursor in original file
