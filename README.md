@@ -24,7 +24,7 @@ Configuration options:
   // If true, also save a backup copy any time a file is opened (if backup file not exists)
   "backup_on_open_file": true,
 
-  // If true, backups saved per day, in separate folders, for example D:/Sublime Text Backups/2013-05-23/myfile.php
+  // If true, backups saved per day, in separate folders, e.g. C:/SublimeTextBackups/2013-05-23/myfile.php
   "backup_per_day": true,
 
   // If set, backups saved per second. possible values: false, "folder" or "file"
@@ -34,7 +34,7 @@ Configuration options:
   // to use this feature, you must have enabled backup_per_day setting
   "backup_per_time": "file",
 
-  // If set, will change the name of the file according to the format using the following building blocks:
+  // If set, changes the filename using the following building blocks:
   //     tag i.e. "auto-save"
   //     name i.e. "myfile"
   //     date i.e. "2013-05-23"
