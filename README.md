@@ -61,7 +61,7 @@ Configuration options:
     // VCS folders
     "/\\.svn/", "/\\.hg/", "/\\.git/", "/\\.bzr/",
     // binary extensions
-        "\\.(jpg|JPG|jpeg|JPEG|pjpeg|PJPEG|gif|GIF|png|PNG|apng|APNG|bmp|BMP|mp3|MP3|mid|MID|wav|WAV|au|AU|mp4|MP4|3gp|3GP|avi|AVI|wmv|WMV|mpeg|MPEG|mpg|MPG|mkv|MKV|swf|SWF|flv|FLV|zip|ZIP|rar|RAR|tar|TAR|tgz|TGZ|gz|GZ|bz2?|BZ2?|pdf|PDF|docx?|DOCX?|xlsx?|XLSX?|pptx?|PPTX?|rtf|RTF|psd|PSD|cdr|CDR|fla|FLA|exe|EXE)$"
+    "\\.(jpg|JPG|jpeg|JPEG|pjpeg|PJPEG|gif|GIF|png|PNG|apng|APNG|bmp|BMP|mp3|MP3|mid|MID|wav|WAV|au|AU|mp4|MP4|3gp|3GP|avi|AVI|wmv|WMV|mpeg|MPEG|mpg|MPG|mkv|MKV|swf|SWF|flv|FLV|zip|ZIP|rar|RAR|tar|TAR|tgz|TGZ|gz|GZ|bz2?|BZ2?|pdf|PDF|docx?|DOCX?|xlsx?|XLSX?|pptx?|PPTX?|rtf|RTF|psd|PSD|cdr|CDR|fla|FLA|exe|EXE)$"
   ],
 
   // If true, backup file opened in same line as cursor in original file
