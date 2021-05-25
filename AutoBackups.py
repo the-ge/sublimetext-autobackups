@@ -35,7 +35,6 @@ if reloader_name in sys.modules:
 cprint = globals()["__builtins__"]["print"]
 
 
-
 try:
     # Python 3
     from AutoBackups.autobackups import reloader
@@ -63,11 +62,8 @@ def plugin_loaded():
     backup_name_mode = settings.get('backup_name_mode')
 
     PathsHelper.initialize(platform, backup_dir, backup_per_day, backup_per_time, backup_name_mode)
-    cprint('AutoBackups:    dir={}    per_day={}    per_time={}    name_mode={}'.format(backup_dir, backup_per_day, backup_per_time, backup_name_mode))
+    #cprint('AutoBackups:    dir={}    per_day={}    per_time={}    name_mode={}'.format(backup_dir, backup_per_day, backup_per_time, backup_name_mode))
     sublime.set_timeout(gc, 10000)
-
-
-
 
 
 def gc():
@@ -137,11 +133,12 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
             return
 
 
-        newname = PathsHelper.get_backup_filepath_sanitized(filename)
+        newname = PathsHelper.get_backup_filepath(filename)
+        #cprint("--->  newname: " + newname);
         if newname == None:
             return
 
-        self.console(newname)
+        self.console('Autobackup to: '+newname)
 
         buffer_id = view.buffer_id()
         content = filename+view.substr(sublime.Region(0, view_size))
