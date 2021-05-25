@@ -70,7 +70,7 @@ class PathsHelper(object):
     def create_name_file(filename):
         name = filename
 
-       if PathsHelper.backup_name_mode not in (False, None, ):
+       if PathsHelper.backup_name_mode not in [False, None, ]:
             (filepart, extensionpart) = os.path.splitext(filename)
 
             now_date = str(datetime.datetime.now())
