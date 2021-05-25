@@ -12,6 +12,7 @@ import os
 import re
 import sys
 import datetime
+import unicodedata
 
 
 backup_name_mode_text = 'auto-save'
@@ -97,16 +98,15 @@ class PathsHelper(object):
         if (path is None):
             return ''
 
+        # transform C: into just C for all platforms to be able to use any filesystem to save on
+        path = re.sub(r'^(\w):', r'\1', path)
+
         if PathsHelper.platform != 'Windows':
             # remove any leading / before combining with backup_base
             path = re.sub(r'^/', '', path)
             return path
 
         path = path.replace('/', '\\')
-
-
-        # windows only: transform C: into just C
-        path = re.sub(r'^(\w):', r'\1', path)
 
         # windows only: transform \\remotebox\share into network\remotebox\share
         path = re.sub(r'^\\\\([\w\-]{2,})', r'network\\\1', path)
@@ -120,9 +120,3 @@ class PathsHelper(object):
     def get_backup_filepath(filepath):
         filename = os.path.split(filepath)[1]
         return os.path.join(PathsHelper.get_backup_path(filepath), PathsHelper.create_name_file(filename))
-
-    @staticmethod
-    def get_backup_filepath_sanitized(filename):
-        filename = filename.replace(':', '_')
-
-        return filename
