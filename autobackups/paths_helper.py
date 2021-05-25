@@ -17,6 +17,7 @@ import unicodedata
 
 backup_name_mode_text = 'auto-save'
 
+
 class PathsHelper(object):
     platform = False
     backup_dir = False
@@ -66,11 +67,12 @@ class PathsHelper(object):
             backup_dir = backup_dir +'/'+ date
         return os.path.expanduser(backup_dir)
 
+
     @staticmethod
     def create_name_file(filename):
         name = filename
 
-       if PathsHelper.backup_name_mode not in [False, None, ]:
+        if PathsHelper.backup_name_mode not in [False, None, ]:
             (filepart, extensionpart) = os.path.splitext(filename)
 
             now_date = str(datetime.datetime.now())
@@ -86,12 +88,14 @@ class PathsHelper(object):
 
         return name
 
+
     @staticmethod
     def get_backup_path(filepath):
         path = os.path.expanduser(os.path.split(filepath)[0])
         backup_base = PathsHelper.get_base_dir(False)
         path = PathsHelper.normalise_path(path)
         return os.path.join(backup_base, path)
+
 
     @staticmethod
     def normalise_path(path, slashes = False):
@@ -115,6 +119,7 @@ class PathsHelper(object):
             path = path.replace('\\', '/')
 
         return path
+
 
     @staticmethod
     def get_backup_filepath(filepath):
