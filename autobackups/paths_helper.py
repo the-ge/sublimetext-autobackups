@@ -102,8 +102,9 @@ class PathsHelper(object):
         if (path is None):
             return ''
 
-        # transform C: into just C for all platforms to be able to use any filesystem to save on
-        path = re.sub(r'^(\w):', r'\1', path)
+        # remove Windows forbidden characters for all platforms to be able to use any filesystem to save on
+        forbidden = '":|<>*?'
+        path = ''.join([c for c in path if c not in forbidden])
 
         if PathsHelper.platform != 'Windows':
             # remove any leading / before combining with backup_base
