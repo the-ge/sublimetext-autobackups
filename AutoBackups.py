@@ -1,7 +1,7 @@
 ##
 # This file is part of the AutoBackups package.
 #
-# (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
+# (c) Gabriel Tenita <the.ge.1447624801@tenita.eu>
 #
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
@@ -16,8 +16,8 @@ import re
 import hashlib
 import time
 import threading
-import webbrowser
 from imp import reload
+from AutoBackups.autobackups import bootstrap
 from AutoBackups.autobackups import reloader
 from AutoBackups.autobackups.paths_helper import PathsHelper
 
@@ -30,24 +30,11 @@ if reloader_name in sys.modules:
 def plugin_loaded():
     global settings
     global hashes
+    settings, hashes = bootstrap.init()
 
-    hashes = {}
-    platform = sublime.platform().title()
-
-    if platform == "Osx":
-        platform = "OSX"
-    settings = sublime.load_settings("AutoBackups (" + platform + ").sublime-settings")
-
-    backup_dir = settings.get("backup_dir")
-    backup_per_day = settings.get("backup_per_day")
-    backup_per_time = settings.get("backup_per_time")
-    backup_name_mode = settings.get("backup_name_mode")
-
-    PathsHelper.initialize(
-        platform, backup_dir, backup_per_day, backup_per_time, backup_name_mode
-    )
-    # cprint('AutoBackups:    dir={}    per_day={}    per_time={}    name_mode={}'.format(backup_dir, backup_per_day, backup_per_time, backup_name_mode))
-    sublime.set_timeout(gc, 10000)
+    backup_time = settings.get("delete_old_backups", 0)
+    if backup_time > 0:
+        sublime.set_timeout(gc, 10000)
 
 
 def gc():
@@ -84,28 +71,27 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
             self.console("Backup not saved, file too large (%d bytes)." % view.size())
             return
 
-        filename = view.file_name()
-        if filename == None:
+        filepath = view.file_name()
+        if filepath == None:
             return
 
         # Check file path in excluded regexes
-        if self.is_excluded(filename):
-            # cprint("AutoBackups: " + filename + " is excluded");
+        if self.is_excluded(filepath):
+            print("AutoBackups: " + filepath + " is excluded");
             return
 
         # not create file backup if current file is backup
-        if on_load_event & self.is_backup_file(filename):
+        if on_load_event & self.is_backup_file(filepath):
             return
 
-        newname = PathsHelper.get_backup_filepath(filename)
-        # cprint("--->  newname: " + newname);
+        newname = PathsHelper.get_backup_filepath(filepath)
         if newname == None:
             return
 
         self.console("Autobackup to: " + newname)
 
         buffer_id = view.buffer_id()
-        content = filename + view.substr(sublime.Region(0, view_size))
+        content = filepath + view.substr(sublime.Region(0, view_size))
         content = self.encode(content)
         current_hash = hashlib.md5(content).hexdigest()
 
@@ -129,9 +115,9 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
             os.makedirs(backup_dir)
 
         try:
-            shutil.copy(filename, newname)
+            shutil.copy(filepath, newname)
         except FileNotFoundError:
-            self.console("Backup not saved. File " + filename + " does not exist!")
+            self.console("Backup not saved. File " + filepath + " does not exist!")
             return False
 
         hashes[buffer_id] = current_hash
@@ -153,7 +139,7 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
         else:
             return False
 
-    def is_excluded(self, filename):
+    def is_excluded(self, filepath):
         # check
         ignore_regexes = settings.get("ignore_regexes")
 
@@ -162,7 +148,7 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
         for regex in ignore_regexes:
             prog = re.compile(".*" + regex + ".*")
-            result = prog.match(filename)
+            result = prog.match(filepath)
             if result is not None:
                 return True
 
@@ -179,237 +165,6 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
         if isinstance(text, str):
             text = text.encode("UTF-8")
         return text
-
-
-class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
-    datalist = []
-    curline = 1
-
-    def run(self, edit):
-        backup_per_day = settings.get("backup_per_day")
-
-        window = self.view.window()
-        view = self.view
-
-        open_in_same_line = settings.get("open_in_same_line", True)
-        if open_in_same_line:
-            (row, col) = view.rowcol(view.sel()[0].begin())
-            self.curline = row + 1
-
-        if not backup_per_day:
-            filepath = view.file_name()
-            newname = PathsHelper.get_backup_filepath_sanitized(filepath)
-            if os.path.isfile(newname):
-                window.open_file(newname)
-            else:
-                sublime.error_message("Backup for " + filepath + " does not exist!")
-        else:
-            f_files = self.getData(False)
-
-            if not f_files:
-                sublime.error_message("Backups for this file do not exist!")
-                return
-
-            backup_per_time = settings.get("backup_per_time")
-            if backup_per_time:
-                window.show_quick_panel(f_files, self.timeFolders)
-            else:
-                window.show_quick_panel(f_files, self.openFile)
-            return
-
-    def getData(self, time_folder):
-        filename = PathsHelper.normalise_path(self.view.file_name(), True)
-        basedir = PathsHelper.get_base_dir(True)
-
-        backup_per_time = settings.get("backup_per_time")
-        if backup_per_time:
-            if backup_per_time == "folder":
-                f_files = []
-                if time_folder is not False:
-                    tm_folders = self.getData(False)
-                    tm_folder = tm_folders[time_folder][0]
-                    basedir = basedir + "/" + tm_folder
-
-                    if not os.path.isdir(basedir):
-                        sublime.error_message("Folder " + basedir + " not found!")
-
-                    for folder in os.listdir(basedir):
-                        fl = basedir + "/" + folder + "/" + filename
-                        match = re.search(r"^[0-9+]{6}$", folder)
-                        if os.path.isfile(fl) and match is not None:
-                            folder_name, file_name = os.path.split(fl)
-                            f_file = []
-                            time = self.formatTime(folder)
-                            f_file.append(time + " - " + file_name)
-                            f_file.append(fl)
-                            f_files.append(f_file)
-                else:
-                    path, flname = os.path.split(filename)
-                    (filepart, extpart) = os.path.splitext(flname)
-                    for folder in os.listdir(basedir):
-                        match = re.search(r"^[0-9+]{4}-[0-9+]{2}-[0-9+]{2}$", folder)
-                        if match is not None:
-                            folder_name, file_name = os.path.split(filename)
-                            f_file = []
-                            basedir2 = basedir + "/" + folder
-                            count = 0
-                            last = ""
-                            for folder2 in os.listdir(basedir2):
-                                match = re.search(r"^[0-9+]{6}$", folder2)
-                                if match is not None:
-                                    basedir3 = (
-                                        basedir
-                                        + "/"
-                                        + folder
-                                        + "/"
-                                        + folder2
-                                        + "/"
-                                        + filename
-                                    )
-                                    if os.path.isfile(basedir3):
-                                        count += 1
-                                        last = folder2
-                            if count > 0:
-                                f_file.append(folder)
-                                f_file.append(
-                                    "Backups: "
-                                    + str(count)
-                                    + ", Last edit: "
-                                    + self.formatTime(last)
-                                )
-                                f_files.append(f_file)
-            elif backup_per_time == "file":
-                f_files = []
-                if time_folder is not False:
-                    tm_folders = self.getData(False)
-                    tm_folder = tm_folders[time_folder][0]
-                    path, flname = os.path.split(filename)
-                    basedir = basedir + "/" + tm_folder + "/" + path
-                    (filepart, extpart) = os.path.splitext(flname)
-
-                    if not os.path.isdir(basedir):
-                        sublime.error_message("Folder " + basedir + " not found!")
-
-                    for folder in os.listdir(basedir):
-                        fl = basedir + "/" + folder
-                        match = re.search(
-                            r"^"
-                            + re.escape(filepart)
-                            + "_([0-9+]{6})"
-                            + re.escape(extpart)
-                            + "$",
-                            folder,
-                        )
-
-                        if os.path.isfile(fl) and match is not None:
-                            time = self.formatTime(match.group(1))
-                            f_file = []
-                            f_file.append(time + " - " + flname)
-                            f_file.append(fl)
-                            f_files.append(f_file)
-                else:
-                    path, flname = os.path.split(filename)
-                    (filepart, extpart) = os.path.splitext(flname)
-                    for folder in os.listdir(basedir):
-                        match = re.search(r"^[0-9+]{4}-[0-9+]{2}-[0-9+]{2}$", folder)
-                        if match is not None:
-                            folder_name, file_name = os.path.split(filename)
-                            f_file = []
-                            basedir2 = basedir + "/" + folder + "/" + path
-                            count = 0
-                            last = ""
-                            if os.path.isdir(basedir2):
-                                for sfile in os.listdir(basedir2):
-                                    match = re.search(
-                                        r"^"
-                                        + re.escape(filepart)
-                                        + "_([0-9+]{6})"
-                                        + re.escape(extpart)
-                                        + "$",
-                                        sfile,
-                                    )
-                                    if match is not None:
-                                        count += 1
-                                        last = match.group(1)
-                            if count > 0:
-                                f_file.append(folder)
-                                f_file.append(
-                                    "Backups: "
-                                    + str(count)
-                                    + ", Last edit: "
-                                    + self.formatTime(last)
-                                )
-                                f_files.append(f_file)
-        else:
-            f_files = []
-            for folder in os.listdir(basedir):
-                fl = basedir + "/" + folder + "/" + filename
-                match = re.search(r"^[0-9+]{4}-[0-9+]{2}-[0-9+]{2}$", folder)
-                if os.path.isfile(fl) and match is not None:
-                    folder_name, file_name = os.path.split(fl)
-                    f_file = []
-                    f_file.append(folder + " - " + file_name)
-                    f_file.append(fl)
-                    f_files.append(f_file)
-        f_files.sort(key=lambda x: x[0])
-        f_files.reverse()
-        self.datalist = f_files
-        return f_files
-
-    def timeFolders(self, parent):
-        if parent == -1:
-            return
-
-        # open file
-        f_files = self.getData(parent)
-        show_previews = settings.get("show_previews", True)
-        if show_previews:
-            sublime.set_timeout_async(
-                lambda: self.view.window().show_quick_panel(
-                    f_files, self.openFile, on_highlight=self.showFile
-                ),
-                100,
-            )
-        else:
-            sublime.set_timeout_async(
-                lambda: self.view.window().show_quick_panel(f_files, self.openFile), 100
-            )
-
-        return
-
-    def showFile(self, file):
-        if file == -1:
-            return
-
-        f_files = self.datalist
-        filename = f_files[file][1]
-        window = self.view.window()
-
-        view = window.open_file(
-            filename + ":" + str(self.curline),
-            sublime.ENCODED_POSITION | sublime.TRANSIENT,
-        )
-        view.set_read_only(True)
-
-    def openFile(self, file):
-        if file == -1:
-            window = sublime.active_window()
-            window.focus_view(self.view)
-            return
-
-        f_files = self.datalist
-        filename = f_files[file][1]
-
-        window = self.view.window()
-        view = window.open_file(
-            filename + ":" + str(self.curline), sublime.ENCODED_POSITION
-        )
-        view.set_read_only(True)
-        window.focus_view(view)
-
-    def formatTime(self, time):
-        time = time[0:2] + ":" + time[2:4] + ":" + time[4:6]
-        return time
 
 
 class AutoBackupsGcBackup(threading.Thread):
@@ -443,13 +198,13 @@ class AutoBackupsGcBackup(threading.Thread):
                         shutil.rmtree(fldr, onerror=self.onerror)
                         deleted = deleted + 1
                     except Exception as e:
-                        cprint(e)
+                        print(e)
 
         if deleted > 0:
             diff = backup_time * 24 * 3600
             dt = now_time - diff
             date = datetime.datetime.fromtimestamp(dt).strftime("%Y-%m-%d")
-            cprint(
+            print(
                 "AutoBackups: Deleted "
                 + str(deleted)
                 + " backup folders older than "
@@ -465,31 +220,3 @@ class AutoBackupsGcBackup(threading.Thread):
             func(path)
         else:
             raise
-
-
-class AutoBackupsDonateCommand(sublime_plugin.WindowCommand):
-    def run(self, paths=[]):
-        sublime.message_dialog("AutoBackups: Thanks for your support ^_^")
-        webbrowser.open_new_tab(
-            "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=akalongman@gmail.com&item_name=Donation to Sublime Text - AutoBackups&item_number=1&no_shipping=1"
-        )
-
-
-class AutoBackupsOpenBackupsFolderCommand(sublime_plugin.WindowCommand):
-    def run(self, paths=[]):
-        backup_dir = settings.get("backup_dir")
-
-        if sublime.platform() == "windows":
-            import subprocess
-
-            if self.isDirectory():
-                subprocess.Popen(["explorer", self.escapeCMDWindows(backup_dir)])
-            else:
-                subprocess.Popen(
-                    ["explorer", "/select,", self.escapeCMDWindows(backup_dir)]
-                )
-        else:
-            sublime.active_window().run_command("open_dir", {"dir": backup_dir})
-
-    def escapeCMDWindows(self, string):
-        return string.replace("^", "^^")

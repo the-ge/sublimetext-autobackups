@@ -1,61 +1,83 @@
 [
-    {
-        "caption": "Preferences",
-        "mnemonic": "n",
-        "id": "preferences",
+  {
+    "id": "project",
+    "children":
+    [
+      { "caption": "-", "id": "autobackups-projectmenu-separator" },
+      {
+        "caption": "Open autobackups root",
+        "id": "autobackups-root",
+        "command": "auto_backups_open_backups_folder"
+      },
+      {
+        "caption": "Open autobackups folder of this file",
+        "id": "autobackups-folder",
+        "command": "auto_backups_open_backup_folder"
+      },
+      {
+        "caption": "Open last autobackup of this file",
+        "id": "autobackups-last",
+        "command": "auto_backups_open_backup"
+      }
+    ]
+  },
+  {
+    "caption": "Preferences",
+    "mnemonic": "n",
+    "id": "preferences",
+    "children":
+    [
+      {
+        "caption": "Package Settings",
+        "mnemonic": "P",
+        "id": "package-settings",
         "children":
         [
-            {
-                "caption": "Package Settings",
-                "mnemonic": "P",
-                "id": "package-settings",
-                "children":
-                [
-                    {
-                        "caption": "AutoBackups",
-                        "children":
-                        [
-                            {
-                                "command": "open_file",
-                                "args": {"file": "${packages}/AutoBackups/AutoBackups (Windows).sublime-settings", "platform": "Windows"},
-                                "caption": "Settings – Default"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {"file": "${packages}/AutoBackups/AutoBackups (Linux).sublime-settings", "platform": "Linux"},
-                                "caption": "Settings – Default"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {"file": "${packages}/AutoBackups/AutoBackups (OSX).sublime-settings", "platform": "OSX"},
-                                "caption": "Settings – Default"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {"file": "${packages}/User/AutoBackups (Windows).sublime-settings", "platform": "Windows"},
-                                "caption": "Settings – User"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {"file": "${packages}/User/AutoBackups (Linux).sublime-settings", "platform": "Linux"},
-                                "caption": "Settings – User"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {"file": "${packages}/User/AutoBackups (OSX).sublime-settings", "platform": "OSX"},
-                                "caption": "Settings – User"
-                            },
-                            { "caption": "-", "id": "autobackups-donate-separator" },
-                            {
-                                "command": "auto_backups_donate",
-                                "args": {},
-                                "caption": "Donate"
-                            },
-                            { "caption": "-" }
-                        ]
-                    }
-                ]
-            }
+          {
+            "caption": "AutoBackups",
+            "children":
+            [
+              {
+                "caption": "Settings – Default",
+                "command": "open_file",
+                "args": {"file": "${packages}/AutoBackups/AutoBackups (Windows).sublime-settings", "platform": "Windows"}
+              },
+              {
+                "caption": "Settings – Default",
+                "command": "open_file",
+                "args": {"file": "${packages}/AutoBackups/AutoBackups (Linux).sublime-settings", "platform": "Linux"}
+              },
+              {
+                "caption": "Settings – Default",
+                "command": "open_file",
+                "args": {"file": "${packages}/AutoBackups/AutoBackups (OSX).sublime-settings", "platform": "OSX"}
+              },
+              {
+                "caption": "Settings – User",
+                "command": "open_file",
+                "args": {"file": "${packages}/User/AutoBackups (Windows).sublime-settings", "platform": "Windows"}
+              },
+              {
+                "caption": "Settings – User",
+                "command": "open_file",
+                "args": {"file": "${packages}/User/AutoBackups (Linux).sublime-settings", "platform": "Linux"}
+              },
+              {
+                "caption": "Settings – User",
+                "command": "open_file",
+                "args": {"file": "${packages}/User/AutoBackups (OSX).sublime-settings", "platform": "OSX"}
+              },
+              { "caption": "-", "id": "autobackups-donate-separator" },
+              {
+                "caption": "Donate",
+                "command": "auto_backups_donate",
+                "args": {}
+              },
+              { "caption": "-" }
+            ]
+          }
         ]
-    }
+      }
+    ]
+  }
 ]

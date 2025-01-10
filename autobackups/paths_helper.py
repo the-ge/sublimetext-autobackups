@@ -1,7 +1,7 @@
 ##
 # This file is part of the AutoBackups package.
 #
-# (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
+# (c) Gabriel Tenita <the.ge.1447624801@tenita.eu>
 #
 # For the full copyright and license information, please view the LICENSE
 # file that was distributed with this source code.
@@ -11,6 +11,7 @@ import sublime
 import os
 import re
 import sys
+import glob
 import datetime
 import unicodedata
 
@@ -125,4 +126,14 @@ class PathsHelper(object):
     @staticmethod
     def get_backup_filepath(filepath):
         filename = os.path.split(filepath)[1]
-        return os.path.join(PathsHelper.get_backup_path(filepath), PathsHelper.create_name_file(filename))
+        backup_path = PathsHelper.get_backup_path(filepath)
+        backup_name = PathsHelper.create_name_file(filename)
+        return os.path.join(backup_path, backup_name)
+
+
+    @staticmethod
+    def get_last_backup_filepath(filepath):
+        filename = os.path.split(filepath)[1]
+        backup_path = PathsHelper.get_backup_path(filepath)
+        backup_name = max(glob.glob(f'{backup_path}/*'), key=os.path.getctime)
+        return os.path.join(backup_path, backup_name)
